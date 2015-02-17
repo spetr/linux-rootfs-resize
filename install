@@ -81,7 +81,7 @@ grub-mod() {
       # grub kernel (softlink)
       grub_kernel=${kernel}-mod
       # modified initrd
-      grub_initrd=${initrd}-mod
+      grub_initrd=${initrd}
       # modify grub config
       grubby -o ${grub_config} --grub --copy-default --add-kernel="${grub_kernel}" \
         --title="${grub_title}" --initrd="${grub_initrd}" --make-default
@@ -90,7 +90,7 @@ grub-mod() {
       # copy kernel
       [ ! -f ${kernel}-mod ] && cp ${kernel} ${kernel}-mod
       # generate new grub2 config
-      grub-mkconfig -o ${grub_config}
+      ${grub}-mkconfig -o ${grub_config}
     ;;
   esac
 }
@@ -129,9 +129,9 @@ distro=""
     distro="centos-6"
     initrd_path="bin sbin usr/bin usr/sbin"
     kernel_version=$(uname -r)
-    if [ -f /boot/initramfs-${kernel_version}.img ]
+    if [ -f /boot/initramfs-${kernel_version}-mod.img ]
     then
-      initrd="/boot/initramfs-$(uname -r).img"
+      initrd="/boot/initramfs-$(uname -r)-mod.img"
       kernel="/boot/vmlinuz-$(uname -r)"
     else
       # this assumes that a box has just been built and there is only a single
@@ -151,13 +151,13 @@ distro=""
   
  # RedHat 7 derivate
 [ -f /etc/redhat-release ] &&
-  if [[ "$(cat /etc/redhat-release)" == *CentOS\ release\ 7* ]]; then
+  if [[ "$(cat /etc/redhat-release)" == *CentOS\ Linux\ release\ 7* ]]; then
     distro="centos-7"
     initrd_path="bin sbin usr/bin usr/sbin"
     kernel_version=$(uname -r)
-    if [ -f /boot/initramfs-${kernel_version}.img ]
+    if [ -f /boot/initramfs-${kernel_version}-mod.img ]
     then
-      initrd="/boot/initramfs-$(uname -r).img"
+      initrd="/boot/initramfs-$(uname -r)-mod.img"
       kernel="/boot/vmlinuz-$(uname -r)"
     else
       # this assumes that a box has just been built and there is only a single
@@ -180,7 +180,7 @@ distro=""
   if [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 7* ]]; then
     distro="debian-7"
     initrd_path="bin sbin"
-    initrd="/boot/initrd.img-$(uname -r)"
+    initrd="/boot/initrd-mod.img-$(uname -r)"
     kernel="/boot/vmlinuz-$(uname -r)"
     init_script="scripts/local"
     proc_insert_point="^mountroot()"
@@ -191,7 +191,7 @@ distro=""
   elif [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 6* ]]; then
     distro="debian-6"
     initrd_path="bin sbin"
-    initrd="/boot/initrd.img-$(uname -r)"
+    initrd="/boot/initrd-mod.img-$(uname -r)"
     kernel="/boot/vmlinuz-$(uname -r)"
     init_script="scripts/local"
     proc_insert_point="^mountroot()"
