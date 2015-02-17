@@ -123,7 +123,7 @@ partition-type
 # check distro and set distro specific variables
 distro=""
 
-# RedHat derivate
+# RedHat 6 derivate
 [ -f /etc/redhat-release ] &&
   if [[ "$(cat /etc/redhat-release)" == *CentOS\ release\ 6* ]]; then
     distro="centos-6"
@@ -148,6 +148,33 @@ distro=""
     grub_config="/boot/grub/grub.conf"
     grub="grub1"
   fi
+  
+ # RedHat 7 derivate
+[ -f /etc/redhat-release ] &&
+  if [[ "$(cat /etc/redhat-release)" == *CentOS\ release\ 7* ]]; then
+    distro="centos-7"
+    initrd_path="bin sbin usr/bin usr/sbin"
+    kernel_version=$(uname -r)
+    if [ -f /boot/initramfs-${kernel_version}.img ]
+    then
+      initrd="/boot/initramfs-$(uname -r).img"
+      kernel="/boot/vmlinuz-$(uname -r)"
+    else
+      # this assumes that a box has just been built and there is only a single
+      # kernel and initramfs, which kinda sucks, but not sure how to handle
+      # multiple initramfs or kernels that might be present - which one is the
+      # 'real' one?
+      initrd=$(ls /boot/initramfs*)
+      kernel=$(ls /boot/vmlinuz-*)
+    fi
+    init_script="init"
+    proc_insert_point="^export PATH=.*"
+    proc_name="growroot"
+    call_insert_point="^source_all pre-mount"
+    grub_config="/boot/grub2/grub.conf"
+    grub="grub2"
+  fi
+  
 # Debian derivate
 [ -f /etc/issue ] &&
   if [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 7* ]]; then
