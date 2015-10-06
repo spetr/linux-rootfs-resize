@@ -24,15 +24,6 @@ INSTALL:
 On CentOS 6:
 
     cd /opt
-    rpm -ivh http://ftp-stud.hs-esslingen.de/pub/epel/6/i386/epel-release-6-8.noarch.rpm
-    yum install git parted cloud-utils
-    git clone https://github.com/spetr/linux-rootfs-resize.git
-    cd linux-rootfs-resize
-    ./install
-
-On CentOS 7:
-
-    cd /opt
     yum install epel-release
     yum install git parted cloud-utils
     git clone https://github.com/spetr/linux-rootfs-resize.git
