@@ -91,7 +91,11 @@ grub-mod() {
       # copy kernel
       [ ! -f ${kernel}-mod ] && cp ${kernel} ${kernel}-mod
       # generate new grub2 config
-      ${grub}-mkconfig -o ${grub_config}
+      if [ -f /usr/sbin/grub2-mkconfig ]; then
+        ${grub}-mkconfig -o ${grub_config}
+      elif [ -f /usr/sbin/grub-mkconfig ]; then
+        grub-mkconfig -o ${grub_config}
+      fi
     ;;
   esac
 }
@@ -188,7 +192,7 @@ distro=""
     proc_name="\        growroot"
     call_insert_point="^.*pre_mountroot$"
     grub_config="/boot/grub/grub.cfg"
-    grub="grub"
+    grub="grub2"
   elif [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 7* ]]; then
     distro="debian-7"
     initrd_path="bin sbin"
