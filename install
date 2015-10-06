@@ -82,7 +82,7 @@ grub-mod() {
       # grub kernel (softlink)
       grub_kernel=${kernel}-mod
       # modified initrd
-      grub_initrd=${initrd}
+      grub_initrd=${initrd}-mod
       # modify grub config
       grubby -o ${grub_config} --grub --copy-default --add-kernel="${grub_kernel}" \
         --title="${grub_title}" --initrd="${grub_initrd}" --make-default
