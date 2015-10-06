@@ -177,7 +177,18 @@ distro=""
   
 # Debian derivate
 [ -f /etc/issue ] &&
-  if [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 7* ]]; then
+  if [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 8* ]]; then
+    distro="debian-8"
+    initrd_path="bin sbin"
+    initrd="/boot/initrd-mod.img-$(uname -r)"
+    kernel="/boot/vmlinuz-$(uname -r)"
+    init_script="scripts/local"
+    proc_insert_point="^mountroot()"
+    proc_name="\        growroot"
+    call_insert_point="^.*pre_mountroot$"
+    grub_config="/boot/grub/grub.cfg"
+    grub="grub2"
+  elif [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 7* ]]; then
     distro="debian-7"
     initrd_path="bin sbin"
     initrd="/boot/initrd-mod.img-$(uname -r)"
