@@ -10,6 +10,7 @@ function deps () {
     [ -f ${file} ] &&
       # is this file new?
       if [ ! -f /tmp/initrd${file} ]; then
+        mkdir -p /tmp/initrd$(dirname ${file})
         cp -v ${file} /tmp/initrd${file}
         if [ $? != 0 ]; then
           # error, bug out
@@ -180,18 +181,18 @@ distro=""
   if [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 8* ]]; then
     distro="debian-8"
     initrd_path="bin sbin"
-    initrd="/boot/initrd-mod.img-$(uname -r)"
+    initrd="/boot/initrd.img-$(uname -r)"
     kernel="/boot/vmlinuz-$(uname -r)"
     init_script="scripts/local"
     proc_insert_point="^mountroot()"
     proc_name="\        growroot"
     call_insert_point="^.*pre_mountroot$"
     grub_config="/boot/grub/grub.cfg"
-    grub="grub2"
+    grub="grub"
   elif [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 7* ]]; then
     distro="debian-7"
     initrd_path="bin sbin"
-    initrd="/boot/initrd-mod.img-$(uname -r)"
+    initrd="/boot/initrd.img-$(uname -r)"
     kernel="/boot/vmlinuz-$(uname -r)"
     init_script="scripts/local"
     proc_insert_point="^mountroot()"
@@ -202,7 +203,7 @@ distro=""
   elif [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 6* ]]; then
     distro="debian-6"
     initrd_path="bin sbin"
-    initrd="/boot/initrd-mod.img-$(uname -r)"
+    initrd="/boot/initrd.img-$(uname -r)"
     kernel="/boot/vmlinuz-$(uname -r)"
     init_script="scripts/local"
     proc_insert_point="^mountroot()"
