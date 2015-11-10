@@ -21,7 +21,7 @@ INSTALL:
 
     Install git, clone this project on your machine, run 'install'. 
 
-On CentOS 6:
+On CentOS:
 
     cd /opt
     yum install epel-release
