@@ -78,14 +78,14 @@ initrd() {
   sed -i "/${call_insert_point}/i ${proc_name}" ${init_script}
   # create new
   find ./ | cpio -H newc -o > /tmp/initrd.cpio
-  gzip -c /tmp/initrd.cpio > ${initrd%.*}mod.${initrd##*.}
+  gzip -c /tmp/initrd.cpio > ${initrd%-*}mod-${initrd##*-}
   # clean up
   cd ${inst_dir}
   rm -rf /tmp/initrd.cpio /tmp/initrd
 }
 
 grub-mod() {
-  kernelmod=${kernel}mod
+  kernelmod=${kernel%-*}mod-${kernel##*-}
   case ${1} in
     "grub1")
       # clean existing mod
@@ -98,7 +98,7 @@ grub-mod() {
       # grub kernel (softlink)
       grub_kernel=${kernelmod}
       # modified initrd
-      grub_initrd=${initrd%.*}mod.${initrd##*.}
+      grub_initrd=${initrd%-*}mod-${initrd##*-}
       # modify grub config
       grubby -o ${grub_config} --grub --copy-default --add-kernel="${grub_kernel}" \
         --title="${grub_title}" --initrd="${grub_initrd}" --make-default
@@ -194,7 +194,7 @@ distro=""
     init_script="scripts/local"
     proc_insert_point="^mountroot()"
     proc_name="\        growroot"
-    call_insert_point="^.*pre_mountroot$"
+    call_insert_point="^.*local_premount$"
     grub_config="/boot/grub/grub.cfg"
     grub="grub2"
   elif [[ "$(cat /etc/issue)" == *Debian\ GNU\/Linux\ 7* ]]; then
