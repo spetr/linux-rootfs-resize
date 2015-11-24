@@ -3,3 +3,5 @@ sfdisk
 e2fsck
 resize2fs
 partx
+sed
+awk
